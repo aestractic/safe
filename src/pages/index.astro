@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Slide from '../components/Slide.astro'
+import Americanos from '../components/Americanos.astro';
+import Asiaticos from '../components/Asiaticos.astro';
+import Europeos from '../components/Europeos.astro';
+import About from '../components/About.astro';
+import Soporte from '../components/Soporte.astro';
+
+---
+
+<Layout title="SAFE">
+	<Header />
+	<main class="snap-y snap-mandatory relative w-full h-screen overflow-auto">
+		
+		<div class="snap-center">
+			<Slide />
+		</div>
+		<div class="snap-center">
+			<Asiaticos />
+		</div>
+		<div class="snap-center">
+			<Americanos />
+		</div>
+		<div class="snap-center">
+			<Europeos />
+		</div>
+		<div class="snap-center">
+			<About />
+		</div>
+		<div class="snap-center">
+			<Soporte />
+		</div>
+		
+	</main>
+</Layout>
