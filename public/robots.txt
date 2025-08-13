@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Optimized for search engines
+Sitemap: https://your-site.vercel.app/sitemap.xml
+
+# Block access to sensitive areas
+Disallow: /api/
+Disallow: /.vercel/
+Disallow: /_astro/
