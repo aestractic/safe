@@ -33,8 +33,11 @@ import Logo from './Logo.astro'
         </ul>
     </nav>
 
+    <!-- Overlay para cerrar menú móvil -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-all duration-300 md:hidden z-30"></div>
+    
     <!-- Menú Móvil -->
-    <nav id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-black/95 backdrop-blur-lg transform translate-x-full transition-transform duration-300 md:hidden">
+    <nav id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-black/95 backdrop-blur-lg transform translate-x-full transition-transform duration-300 md:hidden z-40">
         <div class="p-6 pt-20">
             <ul class="space-y-4 text-lg">
                 <li><a href="/." class="block text-white hover:text-gray-300 transition-colors">Home</a></li>
@@ -57,38 +60,62 @@ import Logo from './Logo.astro'
   // Menú móvil
   const menuToggle = document.querySelector('#menu-toggle') as HTMLButtonElement
   const mobileMenu = document.querySelector('#mobile-menu') as HTMLElement
+  const mobileMenuOverlay = document.querySelector('#mobile-menu-overlay') as HTMLElement
   const mobileMenuLinks = document.querySelectorAll('#mobile-menu a')
   
-  if (menuToggle && mobileMenu) {
+  // Función para cerrar el menú
+  function closeMenu() {
+    if (mobileMenu && menuToggle && mobileMenuOverlay) {
+      mobileMenu.classList.remove('translate-x-0')
+      mobileMenu.classList.add('translate-x-full')
+      mobileMenuOverlay.classList.remove('opacity-100', 'visible')
+      mobileMenuOverlay.classList.add('opacity-0', 'invisible')
+      // Animación del botón hamburguesa - volver al estado normal
+      menuToggle.children[0].classList.remove('rotate-45', 'translate-y-1.5')
+      menuToggle.children[1].classList.remove('opacity-0')
+      menuToggle.children[2].classList.remove('-rotate-45', '-translate-y-1.5')
+    }
+  }
+  
+  // Función para abrir el menú
+  function openMenu() {
+    if (mobileMenu && menuToggle && mobileMenuOverlay) {
+      mobileMenu.classList.remove('translate-x-full')
+      mobileMenu.classList.add('translate-x-0')
+      mobileMenuOverlay.classList.remove('opacity-0', 'invisible')
+      mobileMenuOverlay.classList.add('opacity-100', 'visible')
+      // Animación del botón hamburguesa - convertir en X
+      menuToggle.children[0].classList.add('rotate-45', 'translate-y-1.5')
+      menuToggle.children[1].classList.add('opacity-0')
+      menuToggle.children[2].classList.add('-rotate-45', '-translate-y-1.5')
+    }
+  }
+  
+  if (menuToggle && mobileMenu && mobileMenuOverlay) {
+    // Toggle del menú
     menuToggle.addEventListener('click', () => {
       const isOpen = !mobileMenu.classList.contains('translate-x-full')
       
-      if (!isOpen) {
-        mobileMenu.classList.remove('translate-x-0')
-        mobileMenu.classList.add('translate-x-full')
-        // Animación del botón hamburguesa
-        menuToggle.children[0].classList.remove('rotate-45', 'translate-y-1.5')
-        menuToggle.children[1].classList.remove('opacity-0')
-        menuToggle.children[2].classList.remove('-rotate-45', '-translate-y-1.5')
+      if (isOpen) {
+        closeMenu()
       } else {
-        mobileMenu.classList.remove('translate-x-full')
-        mobileMenu.classList.add('translate-x-0')
-        // Animación del botón hamburguesa
-        menuToggle.children[0].classList.add('rotate-45', 'translate-y-1.5')
-        menuToggle.children[1].classList.add('opacity-0')
-        menuToggle.children[2].classList.add('-rotate-45', '-translate-y-1.5')
+        openMenu()
       }
     })
     
+    // Cerrar menú al hacer click en el overlay
+    mobileMenuOverlay.addEventListener('click', closeMenu)
+    
     // Cerrar menú al hacer click en un enlace
     mobileMenuLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('translate-x-0')
-        mobileMenu.classList.add('translate-x-full')
-        menuToggle.children[0].classList.remove('rotate-45', 'translate-y-1.5')
-        menuToggle.children[1].classList.remove('opacity-0')
-        menuToggle.children[2].classList.remove('-rotate-45', '-translate-y-1.5')
-      })
+      link.addEventListener('click', closeMenu)
+    })
+    
+    // Cerrar menú con la tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !mobileMenu.classList.contains('translate-x-full')) {
+        closeMenu()
+      }
     })
   }
 
